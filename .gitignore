@@ -1,0 +1,6 @@
+.DS_Store
+node_modules/
+.gstack/
+.design-audit/
+design-audit-20260515/
+design_prompt.md

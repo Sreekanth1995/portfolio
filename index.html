@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sreekanth Mekala — Senior iOS Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/motion@12.38.0/dist/motion.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #0C0C0C;
+      color: #D7E2EA;
+      font-family: 'Kanit', sans-serif;
+      line-height: 1.5;
+      overflow-x: clip;
+    }
+
+    /* Reduced-motion guard — restore visibility for users who opted out */
+    @keyframes hero-float {
+      0%, 100% { transform: translateY(0px)   rotate(0deg)   scale(1);    }
+      40%       { transform: translateY(-18px) rotate(.7deg)  scale(1.015); }
+      70%       { transform: translateY(-8px)  rotate(-.35deg) scale(1.007); }
+    }
+    @keyframes hero-glow {
+      0%, 100% { filter: drop-shadow(0 40px 80px rgba(0,0,0,.85)) drop-shadow(0 0 20px rgba(79,209,199,.04)); }
+      50%      { filter: drop-shadow(0 20px 55px rgba(0,0,0,.55)) drop-shadow(0 0 80px rgba(79,209,199,.22)); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #nav, #hero-h1, #hero-tag, #hero-cta, #hero-portrait,
+      #about-h, #exp-h, #proj-h, #contact-h,
+      .deco, .exp-item, .svc-item {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      html { scroll-behavior: auto; }
+      .hero-portrait img { animation: none !important; }
+    }
+
+    .grad {
+      background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .heading {
+      font-size: clamp(3rem, 12vw, 10rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      text-wrap: balance;
+    }
+
+    .btn-contact {
+      background: linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%);
+      box-shadow: 0 4px 4px rgba(181,1,167,.25), inset 4px 4px 12px #7721B1;
+      outline: 2px solid #fff;
+      outline-offset: -3px;
+      color: #fff;
+      font-family: 'Kanit', sans-serif;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-size: clamp(.7rem, .9vw, 1rem);
+      border: none;
+      border-radius: 9999px;
+      padding: .75rem 2.5rem;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+      transition: opacity .2s;
+      white-space: nowrap;
+    }
+    .btn-contact:hover { opacity: .85; }
+
+    .btn-ghost {
+      border: 2px solid #D7E2EA;
+      color: #D7E2EA;
+      background: transparent;
+      font-family: 'Kanit', sans-serif;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-size: clamp(.7rem, .9vw, 1rem);
+      border-radius: 9999px;
+      padding: .6rem 1.5rem;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+      transition: background .2s;
+      white-space: nowrap;
+    }
+    .btn-ghost:hover { background: rgba(215,226,234,.1); }
+
+    /* ── HERO ── */
+    #hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      background: #0C0C0C;
+    }
+    .hero-nav {
+      display: flex;
+      justify-content: space-between;
+      padding: clamp(1rem,2vw,1.75rem) clamp(1.25rem,3vw,2.5rem) 0;
+    }
+    .hero-nav a {
+      color: #D7E2EA;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: clamp(.7rem,1.1vw,1.3rem);
+      text-decoration: none;
+      transition: opacity .2s;
+      /* WCAG / Apple HIG 44px minimum touch target */
+      display: inline-block;
+      padding: 14px 8px;
+      margin: -14px -8px;
+    }
+    .hero-nav a:hover { opacity: .7; }
+    .hero-nav a:focus-visible {
+      outline: 2px solid #D7E2EA;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    .hero-title-wrap {
+      padding: 0 clamp(1.25rem,3vw,2.5rem);
+    }
+    .hero-title {
+      font-size: clamp(3rem, 14vw, 14rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -.02em;
+      line-height: .95;
+      display: block;
+      margin-top: .5rem;
+      text-wrap: balance;
+    }
+
+    .hero-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 clamp(1.25rem,3vw,2.5rem) clamp(1.5rem,2.5vw,2.5rem);
+      margin-top: auto;
+      position: relative;
+      z-index: 20;
+    }
+    .hero-tagline {
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      line-height: 1.4;
+      font-size: clamp(.65rem,1.1vw,1.3rem);
+      max-width: 220px;
+    }
+    .hero-portrait {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      z-index: 10;
+      width: clamp(220px,30vw,500px);
+      aspect-ratio: 1 / 0.72;
+      overflow: hidden;
+    }
+    .hero-portrait img {
+      width: 100%;
+      display: block;
+      position: relative;
+      z-index: 1;
+      animation: hero-float 6s ease-in-out infinite 1.4s,
+                 hero-glow  4s ease-in-out infinite 1.4s;
+    }
+
+    /* ── MARQUEE ── */
+    #marquee {
+      padding: clamp(4rem,8vw,10rem) 0 1rem;
+      overflow: hidden;
+    }
+    .m-row {
+      display: flex;
+      gap: 12px;
+      will-change: transform;
+      margin-bottom: 12px;
+    }
+    .m-tile {
+      flex-shrink: 0;
+      width: 420px;
+      height: 270px;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .m-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ── ABOUT ── */
+    #about {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5rem clamp(1.25rem,5vw,2.5rem);
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+    }
+    .deco { position: absolute; pointer-events: none; }
+    .deco img { display: block; width: 100%; }
+    .deco-tl { top: 4%; left: clamp(.5%,4%,4%);    width: clamp(60px,12vw,210px); }
+    .deco-bl { bottom: 8%; left: clamp(2%,10%,10%); width: clamp(50px,10vw,180px); }
+    .deco-tr { top: 4%; right: clamp(.5%,4%,4%);   width: clamp(60px,12vw,210px); }
+    .deco-br { bottom: 8%; right: clamp(2%,10%,10%); width: clamp(70px,13vw,220px); }
+
+    #about .heading { margin-bottom: clamp(1.5rem,4vw,3.5rem); }
+    .about-body {
+      font-weight: 500;
+      line-height: 1.75;
+      font-size: clamp(.9rem,1.7vw,1.3rem);
+      max-width: 560px;
+      margin-bottom: clamp(3rem,6vw,6rem);
+    }
+
+    /* ── EXPERIENCE ── */
+    .exp-list { display: flex; flex-direction: column; }
+    .exp-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 2rem;
+      padding: clamp(1.5rem,3vw,2.5rem) 0;
+      border-bottom: 1px solid rgba(215,226,234,.1);
+      transition: padding-left .25s ease;
+    }
+    .exp-item:hover { padding-left: .75rem; }
+    @media (max-width: 600px) {
+      .exp-item { grid-template-columns: 1fr; gap: .75rem; }
+    }
+    .exp-dates {
+      font-size: clamp(.7rem,1.1vw,1rem);
+      font-weight: 300;
+      color: rgba(215,226,234,.5);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      padding-top: .3rem;
+      white-space: nowrap;
+    }
+    .exp-company {
+      font-size: clamp(1.1rem,1.8vw,1.6rem);
+      font-weight: 700;
+      color: #D7E2EA;
+      text-transform: uppercase;
+      letter-spacing: -.01em;
+    }
+    .exp-role {
+      font-size: clamp(.8rem,1.2vw,1.1rem);
+      font-weight: 400;
+      color: rgba(215,226,234,.6);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin: .25rem 0 .6rem;
+    }
+    .exp-desc {
+      font-size: clamp(.85rem,1.3vw,1.1rem);
+      font-weight: 300;
+      line-height: 1.65;
+      color: rgba(215,226,234,.75);
+      max-width: 520px;
+      margin-bottom: .75rem;
+    }
+    .exp-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .exp-tags span {
+      font-size: clamp(.65rem,.9vw,.8rem);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: #D7E2EA;
+      border: 1px solid rgba(215,226,234,.25);
+      border-radius: 9999px;
+      padding: .2rem .75rem;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: #0C0C0C;
+      color: #D7E2EA;
+      padding: clamp(4rem,6vw,8rem) clamp(1.25rem,5vw,2.5rem);
+    }
+    #services .heading {
+      text-align: center;
+      margin-bottom: clamp(2.5rem,5vw,6rem);
+    }
+    .svc-list { max-width: 900px; margin: 0 auto; }
+    .svc-item {
+      display: flex;
+      align-items: flex-start;
+      gap: clamp(.75rem,2.5vw,2.5rem);
+      padding: clamp(1.25rem,2.5vw,2.5rem) 0;
+      border-bottom: 1px solid rgba(215,226,234,.1);
+      transition: padding-left .25s ease, opacity .25s ease;
+    }
+    .svc-item:first-child { border-top: 1px solid rgba(215,226,234,.1); }
+    .svc-item:hover { padding-left: .75rem; opacity: .85; }
+    .svc-num {
+      font-size: clamp(2rem,7vw,110px);
+      font-weight: 900;
+      color: #4fd1c7;
+      line-height: 1;
+      flex-shrink: 0;
+      min-width: clamp(36px,7vw,120px);
+    }
+    .svc-name {
+      font-size: clamp(.9rem,1.8vw,1.9rem);
+      font-weight: 500;
+      text-transform: uppercase;
+      color: #D7E2EA;
+      margin-bottom: .4rem;
+    }
+    .svc-desc {
+      font-size: clamp(.8rem,1.3vw,1.15rem);
+      font-weight: 300;
+      color: rgba(215,226,234,.55);
+      line-height: 1.7;
+      max-width: 34rem;
+    }
+
+    /* ── PROJECTS ── */
+    #projects {
+      background: #0C0C0C;
+      border-radius: clamp(40px,5vw,60px) clamp(40px,5vw,60px) 0 0;
+      margin-top: -3rem;
+      position: relative;
+      z-index: 10;
+      padding: clamp(4rem,6vw,8rem) clamp(1.25rem,5vw,2.5rem) 8rem;
+    }
+    #projects .heading {
+      text-align: center;
+      margin-bottom: clamp(2.5rem,5vw,6rem);
+    }
+    .cards-wrap { max-width: 1000px; margin: 0 auto; }
+    .card-outer { height: 85vh; position: relative; }
+    .p-card {
+      position: sticky;
+      border-radius: clamp(24px,4vw,56px);
+      border: 2px solid #D7E2EA;
+      background: #0C0C0C;
+      padding: clamp(.75rem,1.5vw,1.75rem);
+      will-change: transform;
+      transform-origin: top center;
+      transition: border-color .3s ease, box-shadow .3s ease;
+    }
+    .p-card:hover {
+      border-color: rgba(215,226,234,.6);
+      box-shadow: 0 0 40px rgba(215,226,234,.06);
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .card-n {
+      font-size: clamp(2.5rem,6.5vw,90px);
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .card-info { flex: 1; min-width: 80px; }
+    .card-cat {
+      font-size: clamp(.65rem,1.1vw,.95rem);
+      font-weight: 300;
+      color: rgba(215,226,234,.65);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+    .card-ttl {
+      font-size: clamp(1rem,2vw,2rem);
+      font-weight: 700;
+      color: #D7E2EA;
+      text-transform: uppercase;
+    }
+    .card-sub {
+      font-size: clamp(.65rem,.95vw,.85rem);
+      font-weight: 300;
+      color: rgba(215,226,234,.5);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-top: .2rem;
+    }
+    .card-imgs {
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      gap: .6rem;
+    }
+    /* 2-image variant: equal-width side-by-side */
+    .card-imgs.two-up { grid-template-columns: 1fr 1fr; }
+    /* phone (9:16) + iPad (4:3) side-by-side at natural aspect ratios */
+    .card-imgs.phone-ipad { grid-template-columns: 1fr 2.5fr; align-items: start; }
+    .ci-phone { aspect-ratio: 9 / 16; height: auto; }
+    .ci-ipad  { aspect-ratio: 4 / 3;  height: auto; }
+    .col-l { display: flex; flex-direction: column; gap: .6rem; }
+    .ci {
+      border-radius: clamp(14px,2.5vw,40px);
+      overflow: hidden;
+      width: 100%;
+    }
+    .ci img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ci-s { height: clamp(90px,12vw,210px); }
+    .ci-m { height: clamp(120px,16vw,300px); }
+    .ci-t { height: clamp(220px,30vw,530px); }
+    .ci-half { height: clamp(260px,34vw,540px); }
+    @media (max-width: 480px) {
+      .card-imgs { grid-template-columns: 1fr; }
+      .card-imgs.two-up { grid-template-columns: 1fr; }
+      .card-imgs.phone-ipad { grid-template-columns: 1fr; }
+      .ci-t { display: none; }
+      .col-l { flex-direction: row; }
+      .ci-half { height: clamp(220px,60vw,360px); }
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem clamp(1.25rem,5vw,2.5rem);
+      text-align: center;
+      gap: 1.75rem;
+    }
+    #contact .heading { margin-bottom: 0; }
+    .contact-sub {
+      font-size: clamp(.9rem,1.6vw,1.25rem);
+      font-weight: 300;
+      max-width: 500px;
+      line-height: 1.75;
+      opacity: .75;
+    }
+    .contact-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+    footer {
+      text-align: center;
+      padding: 1.75rem;
+      font-size: .8rem;
+      opacity: .35;
+      border-top: 1px solid rgba(215,226,234,.08);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section id="hero">
+    <nav class="hero-nav" id="nav" aria-label="Primary" style="opacity:0">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="hero-title-wrap">
+      <span class="hero-title grad" id="hero-h1" style="opacity:0;transform:translateY(40px)">Hi, I&rsquo;m<br>Sreekanth</span>
+    </div>
+
+    <div class="hero-portrait" id="hero-portrait" style="opacity:0">
+      <div id="portrait-spring">
+        <img
+          src="img/projects/hero.png"
+          alt="Sreekanth Mekala"
+          loading="eager"
+        />
+      </div>
+    </div>
+
+    <div class="hero-bottom">
+      <p class="hero-tagline" id="hero-tag" style="opacity:0">
+        a senior ios developer building experiences people trust and remember
+      </p>
+      <a href="#contact" class="btn-contact" id="hero-cta" style="opacity:0">Contact Me</a>
+    </div>
+  </section>
+
+  <!-- ═══════════ MARQUEE ═══════════ -->
+  <section id="marquee" aria-hidden="true" role="presentation">
+    <div class="m-row" id="row1"></div>
+    <div class="m-row" id="row2"></div>
+  </section>
+
+  <!-- ═══════════ ABOUT ═══════════ -->
+  <section id="about">
+    <div class="deco deco-tl" id="d-tl" style="opacity:0">
+      <img src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/moon_icon.11395d36.png" alt="" />
+    </div>
+    <div class="deco deco-bl" id="d-bl" style="opacity:0">
+      <img src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/p59_1.4659672e.png" alt="" />
+    </div>
+    <div class="deco deco-tr" id="d-tr" style="opacity:0">
+      <img src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/lego_icon-1.703bb594.png" alt="" />
+    </div>
+    <div class="deco deco-br" id="d-br" style="opacity:0">
+      <img src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/Group_134-1.2e04f3ce.png" alt="" />
+    </div>
+
+    <h2 class="heading grad" id="about-h" style="opacity:0;transform:translateY(40px)">About me</h2>
+
+    <p class="about-body" id="about-text">Based in Hyderabad, I'm a Senior iOS Developer with over eight years of experience building apps people trust. I specialize in Swift, SwiftUI, and UIKit — from pixel-perfect custom animations to scalable MVI and MVVM architectures. I've shipped features at JPMorgan Chase, WSAudiology, Mouritech, and Talview across fintech, healthtech, and edtech. iOS Lead Essentials certified. Let's build something incredible together.</p>
+
+    <a href="#contact" class="btn-contact">Contact Me</a>
+  </section>
+
+  <!-- ═══════════ EXPERIENCE ═══════════ -->
+  <section id="experience" style="padding: clamp(4rem,6vw,8rem) 0;">
+    <h2 class="heading grad" id="exp-h" style="opacity:0;transform:translateY(40px);text-align:center;margin-bottom:clamp(2.5rem,5vw,5rem);padding:0 clamp(1.25rem,5vw,2.5rem);">Experience</h2>
+    <div class="exp-list" style="max-width:900px;margin:0 auto;padding:0 clamp(1.25rem,5vw,2.5rem);">
+
+      <div class="exp-item">
+        <div class="exp-left">
+          <div class="exp-dates">Aug 2025 – Present</div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-company">JPMorgan Chase</div>
+          <div class="exp-role">Senior iOS Developer</div>
+          <div class="exp-desc">Offers &amp; Promotions across CCB. Leading MVI + SwiftUI migration from legacy MVVM + UIKit codebase.</div>
+          <div class="exp-tags"><span>Swift</span><span>SwiftUI</span><span>MVI</span><span>UIKit</span></div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-left">
+          <div class="exp-dates">Jan 2024 – Jul 2025</div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-company">WSAudiology</div>
+          <div class="exp-role">Senior Software Engineer</div>
+          <div class="exp-desc">Led Firebase migration, drove feature ownership end-to-end, and participated in cross-team chapter meetings on iOS best practices.</div>
+          <div class="exp-tags"><span>Swift</span><span>Firebase</span><span>Combine</span><span>MVVM</span></div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-left">
+          <div class="exp-dates">Jun 2021 – Jan 2024</div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-company">Mouritech</div>
+          <div class="exp-role">SDE II</div>
+          <div class="exp-desc">Built custom UI views, controls, animations, and transitions from scratch. Delivered VoiceOver accessibility improvements across the app.</div>
+          <div class="exp-tags"><span>UIKit</span><span>Animations</span><span>Accessibility</span><span>Swift</span></div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-left">
+          <div class="exp-dates">Oct 2018 – May 2021</div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-company">Talview</div>
+          <div class="exp-role">iOS Developer</div>
+          <div class="exp-desc">Implemented real-time face detection using Apple's Vision framework. Owned the iOS app end-to-end — architecture, CI, and release.</div>
+          <div class="exp-tags"><span>Vision</span><span>Swift</span><span>CI/CD</span><span>Fastlane</span></div>
+        </div>
+      </div>
+
+      <div class="exp-item" style="border-bottom: none;">
+        <div class="exp-left">
+          <div class="exp-dates">Dec 2016 – Oct 2018</div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-company">KarHappy</div>
+          <div class="exp-role">iOS Developer</div>
+          <div class="exp-desc">Integrated Google Maps Directions API and Firebase real-time messaging. Shipped core iOS features from zero to production.</div>
+          <div class="exp-tags"><span>Maps</span><span>Firebase</span><span>Objective-C</span><span>Swift</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════ SERVICES ═══════════ -->
+  <section id="services">
+    <h2 class="heading">Expertise</h2>
+    <div class="svc-list">
+      <div class="svc-item">
+        <div class="svc-num">01</div>
+        <div>
+          <div class="svc-name">Swift &amp; SwiftUI</div>
+          <div class="svc-desc">Building modern iOS experiences from pixel-perfect UI components to complex reactive state management with MVVM and MVI architectures.</div>
+        </div>
+      </div>
+      <div class="svc-item">
+        <div class="svc-num">02</div>
+        <div>
+          <div class="svc-name">UIKit &amp; Custom Animations</div>
+          <div class="svc-desc">Crafting custom views, controls, and transitions in UIKit — delivering fluid, tactile interactions that feel native and memorable.</div>
+        </div>
+      </div>
+      <div class="svc-item">
+        <div class="svc-num">03</div>
+        <div>
+          <div class="svc-name">App Architecture</div>
+          <div class="svc-desc">Designing maintainable codebases with MVVM, MVI, Clean Architecture, and Combine — built to scale with your product roadmap.</div>
+        </div>
+      </div>
+      <div class="svc-item">
+        <div class="svc-num">04</div>
+        <div>
+          <div class="svc-name">CI/CD &amp; Automation</div>
+          <div class="svc-desc">Setting up automated pipelines with Fastlane, GitHub Actions, and Firebase App Distribution — reliable builds and releases, every time.</div>
+        </div>
+      </div>
+      <div class="svc-item">
+        <div class="svc-num">05</div>
+        <div>
+          <div class="svc-name">Performance &amp; Testing</div>
+          <div class="svc-desc">Profiling with Instruments, writing comprehensive unit test suites, and catching regressions before they ever reach production.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ PROJECTS ═══════════ -->
+  <section id="projects">
+    <h2 class="heading grad" style="opacity:0;transform:translateY(40px)" id="proj-h">Projects</h2>
+    <div class="cards-wrap">
+
+      <!-- 01 JPMorgan Chase — 3 images (small landscape + medium portrait + tall square) -->
+      <div class="card-outer">
+        <div class="p-card" id="pc0" style="top:6rem">
+          <div class="card-head">
+            <div class="card-n grad">01</div>
+            <div class="card-info">
+              <div class="card-cat">Employer · Aug 2025–Present</div>
+              <div class="card-ttl">JPMorgan Chase</div>
+              <div class="card-sub">Offers &amp; Promotions · MVI + SwiftUI Migration</div>
+            </div>
+            <button class="btn-ghost">iOS App</button>
+          </div>
+          <div class="card-imgs">
+            <div class="col-l">
+              <div class="ci ci-s"><img src="img/projects/01-jpmc-a.png" alt="MVI architecture flow on the JPMorgan Offers and Promotions banking dashboard" loading="lazy" /></div>
+              <div class="ci ci-m"><img src="img/projects/01-jpmc-b.png" alt="SwiftUI rewards dashboard with credit card offers and progress rings" loading="lazy" /></div>
+            </div>
+            <div class="ci ci-t"><img src="img/projects/01-jpmc-c.png" alt="iPad Pro running Swift Playgrounds with live SwiftUI preview of a card component" loading="lazy" /></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 WSAudiology — 2 images (side-by-side) -->
+      <div class="card-outer">
+        <div class="p-card" id="pc1" style="top:calc(6rem + 28px)">
+          <div class="card-head">
+            <div class="card-n grad">02</div>
+            <div class="card-info">
+              <div class="card-cat">Employer · Jan 2024–Jul 2025</div>
+              <div class="card-ttl">WSAudiology</div>
+              <div class="card-sub">Firebase Migration · Feature Leadership</div>
+            </div>
+            <button class="btn-ghost">iOS App</button>
+          </div>
+          <div class="card-imgs two-up">
+            <div class="ci ci-half"><img src="img/projects/02-wsa-a.png" alt="Side-by-side performance comparison: legacy loading states vs Firebase instant sync with 0ms latency markers" loading="lazy" /></div>
+            <div class="ci ci-half"><img src="img/projects/02-wsa-b.png" alt="Slide-deck presentation for an iOS chapter meeting covering Combine and async/await" loading="lazy" /></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 MouriTech — 2 images (side-by-side) -->
+      <div class="card-outer">
+        <div class="p-card" id="pc2" style="top:calc(6rem + 56px)">
+          <div class="card-head">
+            <div class="card-n grad">03</div>
+            <div class="card-info">
+              <div class="card-cat">Employer · Jun 2021–Jan 2024</div>
+              <div class="card-ttl">MouriTech</div>
+              <div class="card-sub">Accessibility · Custom UIKit Animations</div>
+            </div>
+            <button class="btn-ghost">iOS App</button>
+          </div>
+          <div class="card-imgs two-up">
+            <div class="ci ci-half"><img src="img/projects/03-mt-a.png" alt="VoiceOver accessibility overlay showing focus rings, custom descriptions, and reading order on a high-contrast iOS list" loading="lazy" /></div>
+            <div class="ci ci-half"><img src="img/projects/03-mt-b.png" alt="Multi-frame motion-blur capture of a custom UIKit view transition" loading="lazy" /></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 Talview — 2 images (side-by-side) -->
+      <div class="card-outer">
+        <div class="p-card" id="pc3" style="top:calc(6rem + 84px)">
+          <div class="card-head">
+            <div class="card-n grad">04</div>
+            <div class="card-info">
+              <div class="card-cat">Employer · Oct 2018–May 2021</div>
+              <div class="card-ttl">Talview</div>
+              <div class="card-sub">Real-time Face Detection · Vision Framework</div>
+            </div>
+            <button class="btn-ghost">iOS App</button>
+          </div>
+          <div class="card-imgs phone-ipad">
+            <div class="ci ci-phone"><img src="img/projects/04-talview-a.png" alt="Live iPhone camera view with a bright wireframe mesh tracing facial contours via Apple Vision framework" loading="lazy" /></div>
+            <div class="ci ci-ipad"><img src="img/projects/04-talview-b.png" alt="Split-screen showing raw face photo on the left and VNDetectFaceLandmarks output with 70+ marked points on the right" loading="lazy" /></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════ CONTACT ═══════════ -->
+  <section id="contact">
+    <h2 class="heading grad" id="contact-h" style="opacity:0;transform:translateY(40px)">Let&rsquo;s Talk</h2>
+    <p class="contact-sub">Open to Senior iOS roles, interesting side projects, and conversations with people who care about craft.</p>
+    <div class="contact-btns">
+      <a href="mailto:msreekanth112@gmail.com" class="btn-contact">Email Me</a>
+      <a href="https://www.linkedin.com/in/sreekanth-mekala-367822130/" target="_blank" rel="noopener" class="btn-ghost">LinkedIn</a>
+      <a href="https://github.com/SreekanthMekala" target="_blank" rel="noopener" class="btn-ghost">GitHub</a>
+    </div>
+  </section>
+
+  <footer>Sreekanth Mekala &copy; 2026</footer>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ── Reduced-motion bypass ──
+       If the user prefers reduced motion, set every animation-gated
+       element to its final visible state and skip all animations.
+       This is the JS counterpart to the CSS @media guard — it covers
+       elements GSAP would have animated and stops the magnet effect. */
+    var REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (REDUCED_MOTION) {
+      var gated = document.querySelectorAll(
+        '#nav, #hero-h1, #hero-tag, #hero-cta, #hero-portrait, ' +
+        '#about-h, #exp-h, #proj-h, #contact-h, ' +
+        '.deco, .exp-item, .svc-item'
+      );
+      gated.forEach(function(el) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    }
+
+    /* ── Hero entrance ── */
+    gsap.to('#nav',          { opacity:1, y:0,  duration:.7, delay:0   });
+    gsap.to('#hero-h1',      { opacity:1, y:0,  duration:.7, delay:.15 });
+    gsap.to('#hero-tag',     { opacity:1, y:0,  duration:.7, delay:.35 });
+    gsap.to('#hero-cta',     { opacity:1, y:0,  duration:.7, delay:.5  });
+    gsap.to('#hero-portrait',{ opacity:1, y:0,  duration:.7, delay:.6  });
+
+    /* ── Magnet effect on portrait — motion spring ── */
+    (function() {
+      var spring = document.getElementById('portrait-spring');
+      if (!spring || window.matchMedia('(pointer: coarse)').matches) return;
+      if (REDUCED_MOTION) return;
+      var outer = document.getElementById('hero-portrait');
+      var active = false;
+      var springOpts = { type: 'spring', stiffness: 120, damping: 14, mass: 1 };
+      document.addEventListener('mousemove', function(e) {
+        var r = outer.getBoundingClientRect();
+        var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        var dx = e.clientX - cx, dy = e.clientY - cy;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var radius = Math.max(r.width, r.height) / 2 + 150;
+        if (dist < radius) {
+          active = true;
+          Motion.animate(spring, { x: dx / 3, y: dy / 3 }, springOpts);
+        } else if (active) {
+          active = false;
+          Motion.animate(spring, { x: 0, y: 0 }, { type: 'spring', stiffness: 80, damping: 18 });
+        }
+      });
+    })();
+
+    /* ── Marquee ── */
+    var GIFS = [
+      'https://motionsites.ai/assets/hero-space-voyage-preview-eECLH3Yc.gif',
+      'https://motionsites.ai/assets/hero-codenest-preview-Cgppc2qV.gif',
+      'https://motionsites.ai/assets/hero-vex-ventures-preview-BczMFIiw.gif',
+      'https://motionsites.ai/assets/hero-stellar-ai-v2-preview-DjvxjG3C.gif',
+      'https://motionsites.ai/assets/hero-asme-preview-B_nGDnTP.gif',
+      'https://motionsites.ai/assets/hero-transform-data-preview-Cx5OU29N.gif',
+      'https://motionsites.ai/assets/hero-vitara-preview-Cjz2QYyU.gif',
+      'https://motionsites.ai/assets/hero-terra-preview-BFjrCr7T.gif',
+      'https://motionsites.ai/assets/hero-skyelite-preview-DHaZIgUv.gif',
+      'https://motionsites.ai/assets/hero-aethera-preview-DknSlcTa.gif',
+      'https://motionsites.ai/assets/hero-designpro-preview-D8c5_een.gif',
+      'https://motionsites.ai/assets/hero-stellar-ai-preview-D3HL6bw1.gif',
+      'https://motionsites.ai/assets/hero-xportfolio-preview-D4A8maiC.gif',
+      'https://motionsites.ai/assets/hero-orbit-web3-preview-BXt4OttD.gif',
+      'https://motionsites.ai/assets/hero-nexora-preview-cx5HmUgo.gif',
+      'https://motionsites.ai/assets/hero-evr-ventures-preview-DZxeVFEX.gif',
+      'https://motionsites.ai/assets/hero-planet-orbit-preview-DWAP8Z1P.gif',
+      'https://motionsites.ai/assets/hero-new-era-preview-CocuDUm9.gif',
+      'https://motionsites.ai/assets/hero-wealth-preview-B70idl_u.gif',
+      'https://motionsites.ai/assets/hero-luminex-preview-CxOP7ce6.gif',
+      'https://motionsites.ai/assets/hero-celestia-preview-0yO3jXO8.gif'
+    ];
+
+    function buildRow(container, urls) {
+      var all = urls.concat(urls).concat(urls);
+      all.forEach(function(url) {
+        var t = document.createElement('div'); t.className = 'm-tile';
+        var i = document.createElement('img'); i.src = url; i.loading = 'lazy'; i.alt = '';
+        t.appendChild(i); container.appendChild(t);
+      });
+    }
+    var row1 = document.getElementById('row1');
+    var row2 = document.getElementById('row2');
+    buildRow(row1, GIFS.slice(0, 11));
+    buildRow(row2, GIFS.slice(11));
+
+    function tickMarquee() {
+      var sec = document.getElementById('marquee');
+      var top = sec.getBoundingClientRect().top + window.scrollY;
+      var offset = (window.scrollY - top + window.innerHeight) * 0.3;
+      row1.style.transform = 'translateX('+(offset-200)+'px)';
+      row2.style.transform = 'translateX('+(-(offset-200))+'px)';
+    }
+    window.addEventListener('scroll', tickMarquee, { passive: true });
+    tickMarquee();
+
+    /* ── About: character-by-character text reveal ──
+       Reduced-motion users get the paragraph at full opacity, no animation.
+       Everyone else: floor opacity raised from .2 to .5 so partially-revealed
+       text is still readable, and the ramp tightened so it completes earlier. */
+    (function() {
+      var p = document.getElementById('about-text');
+      if (REDUCED_MOTION) return;
+      var raw = p.textContent;
+      p.innerHTML = '';
+      var spans = raw.split('').map(function(ch) {
+        var s = document.createElement('span');
+        s.textContent = ch;
+        s.style.cssText = 'opacity:.5;display:inline;';
+        p.appendChild(s);
+        return s;
+      });
+      function tick() {
+        var r = p.getBoundingClientRect();
+        var elTop = r.top + window.scrollY;
+        var start = elTop - window.innerHeight * .8;
+        var end   = elTop + r.height - window.innerHeight * .4;
+        var prog  = Math.max(0, Math.min(1, (window.scrollY - start) / (end - start)));
+        spans.forEach(function(s, i) {
+          var f  = i / spans.length;
+          var cp = Math.max(0, Math.min(1, (prog - f * .5) / .2));
+          s.style.opacity = .5 + cp * .5;
+        });
+      }
+      window.addEventListener('scroll', tick, { passive: true });
+      tick();
+    })();
+
+    /* ── About section GSAP reveals ── */
+    gsap.to('#about-h', {
+      opacity:1, y:0, duration:.7,
+      scrollTrigger:{ trigger:'#about', start:'top 75%', once:true }
+    });
+    [['#d-tl',-80],['#d-tr',80],['#d-bl',-80],['#d-br',80]].forEach(function(pair, i) {
+      gsap.fromTo(pair[0],
+        { opacity:0, x:pair[1] },
+        { opacity:1, x:0, duration:.9, delay:i*.08,
+          scrollTrigger:{ trigger:'#about', start:'top 80%', once:true } }
+      );
+    });
+
+    /* ── Experience section ── */
+    gsap.to('#exp-h', {
+      opacity:1, y:0, duration:.7,
+      scrollTrigger:{ trigger:'#experience', start:'top 80%', once:true }
+    });
+    gsap.utils.toArray('.exp-item').forEach(function(el, i) {
+      gsap.fromTo(el,
+        { opacity:0, y:24 },
+        { opacity:1, y:0, duration:.6, delay:i*.08,
+          scrollTrigger:{ trigger:el, start:'top 88%', once:true } }
+      );
+    });
+
+    /* ── Services stagger ── */
+    gsap.utils.toArray('.svc-item').forEach(function(el, i) {
+      gsap.fromTo(el,
+        { opacity:0, y:30 },
+        { opacity:1, y:0, duration:.6, delay:i*.1,
+          scrollTrigger:{ trigger:el, start:'top 88%', once:true } }
+      );
+    });
+
+    /* ── Projects heading ── */
+    gsap.to('#proj-h', {
+      opacity:1, y:0, duration:.7,
+      scrollTrigger:{ trigger:'#projects', start:'top 80%', once:true }
+    });
+
+    /* ── Sticky card scale-down ── */
+    var cards = document.querySelectorAll('.p-card');
+    var N = cards.length;
+    cards.forEach(function(card, i) {
+      var targetScale = 1 - (N - 1 - i) * .03;
+      if (targetScale < 1) {
+        gsap.to(card, {
+          scale: targetScale,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: card.parentElement,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true
+          }
+        });
+      }
+    });
+
+    /* ── Contact heading ── */
+    gsap.to('#contact-h', {
+      opacity:1, y:0, duration:.7,
+      scrollTrigger:{ trigger:'#contact', start:'top 80%', once:true }
+    });
+  </script>
+</body>
+</html>

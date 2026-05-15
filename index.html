@@ -175,6 +175,8 @@
       aspect-ratio: 1 / 0.72;
       overflow: hidden;
     }
+    /* <picture> is transparent to layout so existing img-targeting CSS still works */
+    picture { display: contents; }
     .hero-portrait img {
       width: 100%;
       display: block;
@@ -476,11 +478,14 @@
 
     <div class="hero-portrait" id="hero-portrait" style="opacity:0">
       <div id="portrait-spring">
-        <img
-          src="img/projects/hero.png"
-          alt="Sreekanth Mekala"
-          loading="eager"
-        />
+        <picture>
+          <source srcset="img/projects/hero.avif" type="image/avif" />
+          <img
+            src="img/projects/hero.png"
+            alt="Sreekanth Mekala"
+            loading="eager"
+          />
+        </picture>
       </div>
     </div>
 
@@ -649,10 +654,10 @@
           </div>
           <div class="card-imgs">
             <div class="col-l">
-              <div class="ci ci-s"><img src="img/projects/01-jpmc-a.png" alt="MVI architecture flow on the JPMorgan Offers and Promotions banking dashboard" loading="lazy" /></div>
-              <div class="ci ci-m"><img src="img/projects/01-jpmc-b.png" alt="SwiftUI rewards dashboard with credit card offers and progress rings" loading="lazy" /></div>
+              <div class="ci ci-s"><picture><source srcset="img/projects/01-jpmc-a.avif" type="image/avif" /><img src="img/projects/01-jpmc-a.png" alt="MVI architecture flow on the JPMorgan Offers and Promotions banking dashboard" loading="lazy" /></picture></div>
+              <div class="ci ci-m"><picture><source srcset="img/projects/01-jpmc-b.avif" type="image/avif" /><img src="img/projects/01-jpmc-b.png" alt="SwiftUI rewards dashboard with credit card offers and progress rings" loading="lazy" /></picture></div>
             </div>
-            <div class="ci ci-t"><img src="img/projects/01-jpmc-c.png" alt="iPad Pro running Swift Playgrounds with live SwiftUI preview of a card component" loading="lazy" /></div>
+            <div class="ci ci-t"><picture><source srcset="img/projects/01-jpmc-c.avif" type="image/avif" /><img src="img/projects/01-jpmc-c.png" alt="iPad Pro running Swift Playgrounds with live SwiftUI preview of a card component" loading="lazy" /></picture></div>
           </div>
         </div>
       </div>
@@ -670,8 +675,8 @@
             <button class="btn-ghost">iOS App</button>
           </div>
           <div class="card-imgs two-up">
-            <div class="ci ci-half"><img src="img/projects/02-wsa-a.png" alt="Side-by-side performance comparison: legacy loading states vs Firebase instant sync with 0ms latency markers" loading="lazy" /></div>
-            <div class="ci ci-half"><img src="img/projects/02-wsa-b.png" alt="Slide-deck presentation for an iOS chapter meeting covering Combine and async/await" loading="lazy" /></div>
+            <div class="ci ci-half"><picture><source srcset="img/projects/02-wsa-a.avif" type="image/avif" /><img src="img/projects/02-wsa-a.png" alt="Side-by-side performance comparison: legacy loading states vs Firebase instant sync with 0ms latency markers" loading="lazy" /></picture></div>
+            <div class="ci ci-half"><picture><source srcset="img/projects/02-wsa-b.avif" type="image/avif" /><img src="img/projects/02-wsa-b.png" alt="Slide-deck presentation for an iOS chapter meeting covering Combine and async/await" loading="lazy" /></picture></div>
           </div>
         </div>
       </div>
@@ -689,8 +694,8 @@
             <button class="btn-ghost">iOS App</button>
           </div>
           <div class="card-imgs two-up">
-            <div class="ci ci-half"><img src="img/projects/03-mt-a.png" alt="VoiceOver accessibility overlay showing focus rings, custom descriptions, and reading order on a high-contrast iOS list" loading="lazy" /></div>
-            <div class="ci ci-half"><img src="img/projects/03-mt-b.png" alt="Multi-frame motion-blur capture of a custom UIKit view transition" loading="lazy" /></div>
+            <div class="ci ci-half"><picture><source srcset="img/projects/03-mt-a.avif" type="image/avif" /><img src="img/projects/03-mt-a.png" alt="VoiceOver accessibility overlay showing focus rings, custom descriptions, and reading order on a high-contrast iOS list" loading="lazy" /></picture></div>
+            <div class="ci ci-half"><picture><source srcset="img/projects/03-mt-b.avif" type="image/avif" /><img src="img/projects/03-mt-b.png" alt="Multi-frame motion-blur capture of a custom UIKit view transition" loading="lazy" /></picture></div>
           </div>
         </div>
       </div>
@@ -708,8 +713,8 @@
             <button class="btn-ghost">iOS App</button>
           </div>
           <div class="card-imgs phone-ipad">
-            <div class="ci ci-phone"><img src="img/projects/04-talview-a.png" alt="Live iPhone camera view with a bright wireframe mesh tracing facial contours via Apple Vision framework" loading="lazy" /></div>
-            <div class="ci ci-ipad"><img src="img/projects/04-talview-b.png" alt="Split-screen showing raw face photo on the left and VNDetectFaceLandmarks output with 70+ marked points on the right" loading="lazy" /></div>
+            <div class="ci ci-phone"><picture><source srcset="img/projects/04-talview-a.avif" type="image/avif" /><img src="img/projects/04-talview-a.png" alt="Live iPhone camera view with a bright wireframe mesh tracing facial contours via Apple Vision framework" loading="lazy" /></picture></div>
+            <div class="ci ci-ipad"><picture><source srcset="img/projects/04-talview-b.avif" type="image/avif" /><img src="img/projects/04-talview-b.png" alt="Split-screen showing raw face photo on the left and VNDetectFaceLandmarks output with 70+ marked points on the right" loading="lazy" /></picture></div>
           </div>
         </div>
       </div>

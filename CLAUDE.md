@@ -31,7 +31,7 @@ Personal portfolio site for **Sreekanth Mekala**, Senior iOS Developer at JPMorg
 | File | Purpose |
 |------|---------|
 | `index.html` | Entire site — HTML, CSS (inline `<style>`), JS (inline `<script>`) |
-| `img/projects/hero.jpeg` | 3D character portrait (animated with CSS float + glow) |
+| `img/projects/hero.png` | 3D character portrait (animated with CSS float + glow) |
 | `img/projects/01-jpmc-*.png` | 3 project images for JPMorgan Chase card |
 | `img/projects/02-wsa-*.png` | 2 project images for WSAudiology card |
 | `img/projects/03-mt-*.png` | 2 project images for MouriTech card |

@@ -62,26 +62,30 @@ Key routing rules:
 - Save progress → invoke /context-save
 - Resume context → invoke /context-restore
 
-## gstack (REQUIRED — global install)
+## gstack
 
-**Before doing ANY work, verify gstack is installed:**
+gstack is installed globally at `~/.claude/skills/gstack/`. Use its skills for browsing, QA, review, and ship workflows.
+
+**Web browsing:** Always use the `/browse` skill from gstack for any web browsing. Never use `mcp__claude-in-chrome__*` tools.
+
+**Available gstack skills:**
+`/office-hours`, `/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review`, `/design-consultation`, `/design-shotgun`, `/design-html`, `/review`, `/ship`, `/land-and-deploy`, `/canary`, `/benchmark`, `/browse`, `/connect-chrome`, `/qa`, `/qa-only`, `/design-review`, `/setup-browser-cookies`, `/setup-deploy`, `/setup-gbrain`, `/retro`, `/investigate`, `/document-release`, `/document-generate`, `/codex`, `/cso`, `/autoplan`, `/plan-devex-review`, `/devex-review`, `/careful`, `/freeze`, `/guard`, `/unfreeze`, `/gstack-upgrade`, `/learn`
+
+**Verify install:**
 
 ```bash
 test -d ~/.claude/skills/gstack/bin && echo "GSTACK_OK" || echo "GSTACK_MISSING"
 ```
 
-If GSTACK_MISSING: STOP. Do not proceed. Tell the user:
+If GSTACK_MISSING, install with:
 
-> gstack is required for all AI-assisted work in this repo.
-> Install it:
-> ```bash
-> git clone --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
-> cd ~/.claude/skills/gstack && ./setup --team
-> ```
-> Then restart your AI coding tool.
+```bash
+git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
+cd ~/.claude/skills/gstack && ./setup --team
+```
 
-Do not skip skills, ignore gstack errors, or work around missing gstack.
+The `--team` flag enables auto-update so the install stays in sync at the start of each session.
 
-Using gstack skills: After install, skills like /qa, /ship, /review, /investigate,
-and /browse are available. Use /browse for all web browsing.
-Use ~/.claude/skills/gstack/... for gstack file paths (the global path).
+This project enforces gstack via a `PreToolUse` Skill hook at [.claude/hooks/check-gstack.sh](.claude/hooks/check-gstack.sh) registered in [.claude/settings.json](.claude/settings.json) — teammates without gstack will be blocked from invoking skills until they install it.
+
+Use `~/.claude/skills/gstack/...` for gstack file paths (the global path).
